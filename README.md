@@ -1,9 +1,9 @@
 # WinMTR
 Fork of https://sourceforge.net/projects/winmtr/ 
 
-** Changed: When you open WinMTR it will default to the host that was last used in the previous session.
+## Changed: When you open WinMTR it will default to the host that was last used in the previous session.
 
-*** Original README.TXT from https://sourceforge.net/projects/winmtr:
+### Original README.TXT from https://sourceforge.net/projects/winmtr:
 
 ﻿WinMTR – Appnor's Free Network Diagnostic Tool - http://winmtr.net
 
