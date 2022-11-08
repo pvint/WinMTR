@@ -215,85 +215,95 @@ BOOL WinMTRDialog::InitRegistry()
 	DWORD res, tmp_dword, value_size;
 	LONG r;
 
-	r = RegCreateKeyEx(	HKEY_CURRENT_USER, 
-					"Software", 
-					0, 
-					NULL,
-					REG_OPTION_NON_VOLATILE,
-					KEY_ALL_ACCESS,
-					NULL,
-					&hKey,
-					&res);
-	if( r != ERROR_SUCCESS) 
+	r = RegCreateKeyEx(HKEY_CURRENT_USER,
+		"Software",
+		0,
+		NULL,
+		REG_OPTION_NON_VOLATILE,
+		KEY_ALL_ACCESS,
+		NULL,
+		&hKey,
+		&res);
+	if (r != ERROR_SUCCESS)
 		return FALSE;
 
-	r = RegCreateKeyEx(	hKey, 
-					"WinMTR", 
-					0, 
-					NULL,
-					REG_OPTION_NON_VOLATILE,
-					KEY_ALL_ACCESS,
-					NULL,
-					&hKey,
-					&res);
-	if( r != ERROR_SUCCESS) 
+	r = RegCreateKeyEx(hKey,
+		"WinMTR",
+		0,
+		NULL,
+		REG_OPTION_NON_VOLATILE,
+		KEY_ALL_ACCESS,
+		NULL,
+		&hKey,
+		&res);
+	if (r != ERROR_SUCCESS)
 		return FALSE;
 
-	RegSetValueEx(hKey,"Version", 0, REG_SZ, (const unsigned char *)WINMTR_VERSION, sizeof(WINMTR_VERSION)+1);
-	RegSetValueEx(hKey,"License", 0, REG_SZ, (const unsigned char *)WINMTR_LICENSE, sizeof(WINMTR_LICENSE)+1);
-	RegSetValueEx(hKey,"HomePage", 0, REG_SZ, (const unsigned char *)WINMTR_HOMEPAGE, sizeof(WINMTR_HOMEPAGE)+1);
+	RegSetValueEx(hKey, "Version", 0, REG_SZ, (const unsigned char*)WINMTR_VERSION, sizeof(WINMTR_VERSION) + 1);
+	RegSetValueEx(hKey, "License", 0, REG_SZ, (const unsigned char*)WINMTR_LICENSE, sizeof(WINMTR_LICENSE) + 1);
+	RegSetValueEx(hKey, "HomePage", 0, REG_SZ, (const unsigned char*)WINMTR_HOMEPAGE, sizeof(WINMTR_HOMEPAGE) + 1);
 
-	r = RegCreateKeyEx(	hKey, 
-					"Config", 
-					0, 
-					NULL,
-					REG_OPTION_NON_VOLATILE,
-					KEY_ALL_ACCESS,
-					NULL,
-					&hKey_v,
-					&res);
-	if( r != ERROR_SUCCESS) 
+	r = RegCreateKeyEx(hKey,
+		"Config",
+		0,
+		NULL,
+		REG_OPTION_NON_VOLATILE,
+		KEY_ALL_ACCESS,
+		NULL,
+		&hKey_v,
+		&res);
+	if (r != ERROR_SUCCESS)
 		return FALSE;
 
-	if(RegQueryValueEx(hKey_v, "PingSize", 0, NULL, (unsigned char *)&tmp_dword, &value_size) != ERROR_SUCCESS) {
+	if (RegQueryValueEx(hKey_v, "PingSize", 0, NULL, (unsigned char*)&tmp_dword, &value_size) != ERROR_SUCCESS) {
 		tmp_dword = pingsize;
-		RegSetValueEx(hKey_v,"PingSize", 0, REG_DWORD, (const unsigned char *)&tmp_dword, sizeof(DWORD));
-	} else {
-		if(!hasPingsizeFromCmdLine) pingsize = tmp_dword;
+		RegSetValueEx(hKey_v, "PingSize", 0, REG_DWORD, (const unsigned char*)&tmp_dword, sizeof(DWORD));
 	}
-	
-	if(RegQueryValueEx(hKey_v, "MaxLRU", 0, NULL, (unsigned char *)&tmp_dword, &value_size) != ERROR_SUCCESS) {
+	else {
+		if (!hasPingsizeFromCmdLine) pingsize = tmp_dword;
+	}
+
+	if (RegQueryValueEx(hKey_v, "MaxLRU", 0, NULL, (unsigned char*)&tmp_dword, &value_size) != ERROR_SUCCESS) {
 		tmp_dword = maxLRU;
-		RegSetValueEx(hKey_v,"MaxLRU", 0, REG_DWORD, (const unsigned char *)&tmp_dword, sizeof(DWORD));
-	} else {
-		if(!hasMaxLRUFromCmdLine) maxLRU = tmp_dword;
+		RegSetValueEx(hKey_v, "MaxLRU", 0, REG_DWORD, (const unsigned char*)&tmp_dword, sizeof(DWORD));
 	}
-	
-	if(RegQueryValueEx(hKey_v, "UseDNS", 0, NULL, (unsigned char *)&tmp_dword, &value_size) != ERROR_SUCCESS) {
+	else {
+		if (!hasMaxLRUFromCmdLine) maxLRU = tmp_dword;
+	}
+
+	if (RegQueryValueEx(hKey_v, "UseDNS", 0, NULL, (unsigned char*)&tmp_dword, &value_size) != ERROR_SUCCESS) {
 		tmp_dword = useDNS ? 1 : 0;
-		RegSetValueEx(hKey_v,"UseDNS", 0, REG_DWORD, (const unsigned char *)&tmp_dword, sizeof(DWORD));
-	} else {
-		if(!hasUseDNSFromCmdLine) useDNS = (BOOL)tmp_dword;
+		RegSetValueEx(hKey_v, "UseDNS", 0, REG_DWORD, (const unsigned char*)&tmp_dword, sizeof(DWORD));
+	}
+	else {
+		if (!hasUseDNSFromCmdLine) useDNS = (BOOL)tmp_dword;
 	}
 
-	if(RegQueryValueEx(hKey_v, "Interval", 0, NULL, (unsigned char *)&tmp_dword, &value_size) != ERROR_SUCCESS) {
+	if (RegQueryValueEx(hKey_v, "Interval", 0, NULL, (unsigned char*)&tmp_dword, &value_size) != ERROR_SUCCESS) {
 		tmp_dword = (DWORD)(interval * 1000);
-		RegSetValueEx(hKey_v,"Interval", 0, REG_DWORD, (const unsigned char *)&tmp_dword, sizeof(DWORD));
-	} else {
-		if(!hasIntervalFromCmdLine) interval = (float)tmp_dword / 1000.0;
+		RegSetValueEx(hKey_v, "Interval", 0, REG_DWORD, (const unsigned char*)&tmp_dword, sizeof(DWORD));
+	}
+	else {
+		if (!hasIntervalFromCmdLine) interval = (float)tmp_dword / 1000.0;
 	}
 
-	r = RegCreateKeyEx(	hKey, 
-					"LRU", 
-					0, 
-					NULL,
-					REG_OPTION_NON_VOLATILE,
-					KEY_ALL_ACCESS,
-					NULL,
-					&hKey_v,
-					&res);
-	if( r != ERROR_SUCCESS) 
+	r = RegCreateKeyEx(hKey,
+		"LRU",
+		0,
+		NULL,
+		REG_OPTION_NON_VOLATILE,
+		KEY_ALL_ACCESS,
+		NULL,
+		&hKey_v,
+		&res);
+	if (r != ERROR_SUCCESS)
 		return FALSE;
+
+	// Get the default LRU from previous session
+	if (RegQueryValueEx(hKey_v, "DefLRU", 0, NULL, (unsigned char*)&tmp_dword, &value_size) == ERROR_SUCCESS) {
+		defaultLRU = tmp_dword;
+	}
+
 	if(RegQueryValueEx(hKey_v, "NrLRU", 0, NULL, (unsigned char *)&tmp_dword, &value_size) != ERROR_SUCCESS) {
 		tmp_dword = nrLRU;
 		RegSetValueEx(hKey_v,"NrLRU", 0, REG_DWORD, (const unsigned char *)&tmp_dword, sizeof(DWORD));
@@ -310,6 +320,9 @@ BOOL WinMTRDialog::InitRegistry()
 			}
 		}
 	}
+	
+	m_comboHost.SetCurSel(defaultLRU);
+	
 	m_comboHost.AddString(CString((LPCSTR)IDS_STRING_CLEAR_HISTORY));
 	RegCloseKey(hKey_v);
 	RegCloseKey(hKey);
@@ -584,6 +597,22 @@ void WinMTRDialog::OnRestart()
 				r = RegSetValueEx(hKey,key_name, 0, REG_SZ, (const unsigned char *)(LPCTSTR)sHost, strlen((LPCTSTR)sHost)+1);
 				tmp_dword = nrLRU;
 				r = RegSetValueEx(hKey,"NrLRU", 0, REG_DWORD, (const unsigned char *)&tmp_dword, sizeof(DWORD));
+
+				
+			}
+			else {
+				HKEY hKey;
+				DWORD tmp_dword;
+				LONG r;
+				char key_name[20];
+
+				r = RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_ALL_ACCESS, &hKey);
+				r = RegOpenKeyEx(hKey, "WinMTR", 0, KEY_ALL_ACCESS, &hKey);
+				r = RegOpenKeyEx(hKey, "LRU", 0, KEY_ALL_ACCESS, &hKey);
+
+				// Set the currently selected host as default
+				tmp_dword = m_comboHost.FindString(-1, sHost);		//GetCurSel();
+				r = RegSetValueEx(hKey, "DefLRU", 0, REG_DWORD, (const unsigned char*)&tmp_dword, sizeof(DWORD));
 				RegCloseKey(hKey);
 			}
 			Transit(TRACING);
@@ -646,6 +675,8 @@ void WinMTRDialog::OnOptions()
 			r = RegSetValueEx(hKey,"NrLRU", 0, REG_DWORD, (const unsigned char *)&tmp_dword, sizeof(DWORD));
 			RegCloseKey(hKey);
 		}
+
+
 	}
 }
 

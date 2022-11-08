@@ -18,6 +18,7 @@
 #include "WinMTRStatusBar.h"
 #include "WinMTRNet.h"
 
+
 //*****************************************************************************
 // CLASS:  WinMTRDialog
 //
@@ -82,6 +83,7 @@ public:
 	int					maxLRU;
 	bool				hasMaxLRUFromCmdLine;
 	int					nrLRU;
+	int					defaultLRU;
 	BOOL				useDNS;
 	bool				hasUseDNSFromCmdLine;
 	WinMTRNet*			wmtrnet;
@@ -99,6 +101,7 @@ protected:
 	char msz_defaulthostname[1000];
 	
 	HICON m_hIcon;
+	HBRUSH m_hDialogBrush;
 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
